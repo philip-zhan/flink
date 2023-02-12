@@ -24,40 +24,54 @@ under the License.
 
 # 有状态流处理
 
-## What is State?
+## 什么是状态（State）?
+
 
 While many operations in a dataflow simply look at one individual *event at a
 time* (for example an event parser), some operations remember information
 across multiple events (for example window operators). These operations are
 called **stateful**.
+尽管对数据流的很多操作都仅限于一次只处理一个事件（例如时间解析器），但还有一些操作需要记录跨越多个事件的信息（例如窗口算子）。这些操作就被称为**有状态的（stateful）**
 
 Some examples of stateful operations:
+有状态操作的例子：
 
   - When an application searches for certain event patterns, the state will
     store the sequence of events encountered so far.
+  - 当应用程序搜索某种事件模式时，状态会记录目前遇到的事件序列。
   - When aggregating events per minute/hour/day, the state holds the pending
     aggregates.
+  - 当以分钟/小时/天来聚合事件时，状态会存放目前待聚合的事件。
   - When training a machine learning model over a stream of data points, the
     state holds the current version of the model parameters.
+  - 当用数据流训练机器学习模型时，状态会存放当前版本的模型参数。
   - When historic data needs to be managed, the state allows efficient access
     to events that occurred in the past.
+  - 当需要管理历史数据时，状态可以让访问过去发生的事件变得高效。
 
 Flink needs to be aware of the state in order to make it fault tolerant using
 [checkpoints]({{< ref "docs/dev/datastream/fault-tolerance/checkpointing" >}})
 and [savepoints]({{< ref "docs/ops/state/savepoints" >}}).
+Flink需要知道这些状态才能通过[checkpoints]({{< ref "docs/dev/datastream/fault-tolerance/checkpointing" >}})
+和[savepoints]({{< ref "docs/ops/state/savepoints" >}})使它们容错（fault tolerant）
 
 Knowledge about the state also allows for rescaling Flink applications, meaning
 that Flink takes care of redistributing state across parallel instances.
+了解这些状态还能让Flink能够在并行实例之间重新分布状态，以便调整应用程序的容量。
 
 [Queryable state]({{< ref "docs/dev/datastream/fault-tolerance/queryable_state" >}}) allows you to access state from outside of Flink during runtime.
+[Queryable state]({{< ref "docs/dev/datastream/fault-tolerance/queryable_state" >}})让你能在Flink运行时在它之外访问状态。
 
 When working with state, it might also be useful to read about [Flink's state
 backends]({{< ref "docs/ops/state/state_backends" >}}). Flink
 provides different state backends that specify how and where state is stored.
+在使用状态时，还可以参考一下[Flink's state
+backends]({{< ref "docs/ops/state/state_backends" >}})。Flink提供多种state backend来区分储存状态的方式和位置。
 
 {{< top >}}
 
 ## Keyed State
+## 有键状态（Keyed State）
 
 Keyed state is maintained in what can be thought of as an embedded key/value
 store.  The state is partitioned and distributed strictly together with the
